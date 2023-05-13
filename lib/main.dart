@@ -126,7 +126,7 @@ class MyApp extends StatelessWidget {
                             ),
                             const Expanded(child: SizedBox()),
                             Container(
-                              width: 180,
+                              width: 170,
                               height: 60,
                               decoration: const BoxDecoration(
                                 color: Color(0xAAFFFFFF),
@@ -146,9 +146,7 @@ class MyApp extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 64.0,
-                        ),
+                        const Expanded(child: SizedBox()),
                         titleSection,
                       ],
                     ),
