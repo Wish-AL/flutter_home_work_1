@@ -1,64 +1,40 @@
 import 'package:flutter/material.dart';
+import 'cards.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  //to convert Stateless to Stateful use Alt+Enter
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<int> items = List<int>.generate(20, (i) => i);
-    const blackColor1 = Color(0xCA000000);
+  State<MyApp> createState() => _MyAppState();
+}
 
-    Widget titleSection = Container(
-      decoration: const BoxDecoration(
-        color: blackColor1,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      padding: const EdgeInsets.all(35),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    'Oeschinen Lake Campground',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Text(
-                  'Kandersteg, Switzerland',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(
-            Icons.star,
-            color: Colors.red[500],
-          ),
-          const Text(
-            '41',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
+class _MyAppState extends State<MyApp> {
+  final List<CardInfo> _listOfCards = [];
+
+  @override
+  void initState() {
+    generateCardInfo();
+
+    super.initState();
+  }
+
+  void generateCardInfo() {
+    for (int i = 0; i > 10; i++) {
+      _listOfCards.add(CardInfo(
+        title: 'title $i',
+        numberCard: i,
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //final List<int> items = List<int>.generate(20, (i) => i);
 
     //Color color = Theme.of(context).primaryColor;
     // Widget textSection = const Padding(
@@ -81,103 +57,29 @@ class MyApp extends StatelessWidget {
           title: const Text('Flutter layout demo'),
         ),
         body: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemCount: _listOfCards.length, //items.length,
+          itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.all(6),
-              child: Stack(children: [
-                Image.asset(
-                  'images/lake.jpg',
-                  width: 600,
-                  height: 250,
-                  fit: BoxFit.cover,
-                ),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 600,
-                    maxHeight: 250,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16, top: 16, right: 16, bottom: 0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: blackColor1,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '#${items[index]}.',
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Expanded(child: SizedBox()),
-                            Container(
-                              width: 170,
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                color: Color(0xAAFFFFFF),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildButtonColumn(
-                                      Colors.blue, Icons.call, 'CALL'),
-                                  _buildButtonColumn(
-                                      Colors.green, Icons.near_me, 'ROUTE'),
-                                  _buildButtonColumn(
-                                      Colors.black, Icons.share, 'SHARE'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Expanded(child: SizedBox()),
-                        titleSection,
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
+              child: Cards(
+                cardInfo: _listOfCards[index],
+              ),
             );
           },
         ),
       ),
     );
   }
-
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color),
-        Container(
-          margin: const EdgeInsets.only(top: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
+
+class CardInfo {
+  final String title;
+  final int numberCard;
+  final String imageUrl;
+
+  CardInfo(
+      {required this.title,
+        required this.numberCard,
+        this.imageUrl = 'images/lake.jpg'});
+}
+
