@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'cards.dart';
+import 'text_changer.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -19,36 +21,27 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     generateCardInfo();
-
     super.initState();
   }
 
   void generateCardInfo() {
-    for (int i = 0; i > 10; i++) {
+    for (int i = 0; i < 10; i++) {
       _listOfCards.add(CardInfo(
-        title: 'title $i',
-        numberCard: i,
+        title: 'Oeschinen Lake Campground',
+        id: i,
       ));
     }
+  }
+
+  void updateCard(CardInfo newCardInfo) {
+    setState(() {
+      _listOfCards[newCardInfo.id] = newCardInfo;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     //final List<int> items = List<int>.generate(20, (i) => i);
-
-    //Color color = Theme.of(context).primaryColor;
-    // Widget textSection = const Padding(
-    //   padding: EdgeInsets.all(32),
-    //   child: Text(
-    //     'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-    //     'Alps. Situated 1,578 meters above sea level, it is one of the '
-    //     'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-    //     'half-hour walk through pastures and pine forest, leads you to the '
-    //     'lake, which warms to 20 degrees Celsius in the summer. Activities '
-    //     'enjoyed here include rowing, and riding the summer toboggan run.',
-    //     softWrap: true,
-    //   ),
-    // );
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -63,6 +56,20 @@ class _MyAppState extends State<MyApp> {
               padding: const EdgeInsets.all(6),
               child: Cards(
                 cardInfo: _listOfCards[index],
+                onTap: () async {
+                  final newCardInfo = await Navigator.push<CardInfo>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => TextChangePage(
+                        cardInfo: _listOfCards[index],
+                      ),
+                    ),
+                  );
+                  //print('++++++++newCardInfo+++++++++++++++ = ${newCardInfo?.title}');
+                  if (newCardInfo?.title != null) {
+                    updateCard(newCardInfo!);
+                  }
+                },
               ),
             );
           },
@@ -73,13 +80,12 @@ class _MyAppState extends State<MyApp> {
 }
 
 class CardInfo {
-  final String title;
-  final int numberCard;
+  String title;
+  final int id;
   final String imageUrl;
 
   CardInfo(
       {required this.title,
-        required this.numberCard,
-        this.imageUrl = 'images/lake.jpg'});
+      required this.id,
+      this.imageUrl = 'images/lake.jpg'});
 }
-

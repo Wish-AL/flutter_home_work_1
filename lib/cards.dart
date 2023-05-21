@@ -1,73 +1,72 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-import 'text_changer.dart';
+//import 'text_changer.dart';
 
 class Cards extends StatelessWidget {
   final CardInfo cardInfo;
+  final VoidCallback onTap;
 
-  const Cards({Key? key, required this.cardInfo}) : super(key: key);
+  const Cards({
+    Key? key,
+    required this.cardInfo,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const blackColor1 = Color(0xCA000000);
 
     Widget titleSection = GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const TextChangePage(),
-          ),
-        );
-      },
+      onTap: onTap,
       child: Container(
-        decoration: const BoxDecoration(
-          color: blackColor1,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+          decoration: const BoxDecoration(
+            color: blackColor1,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(35),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      'Oeschinen Lake Campground',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+          padding: const EdgeInsets.all(35),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        cardInfo.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    'Kandersteg, Switzerland',
-                    style: TextStyle(
-                      color: Colors.grey[500],
+                    Text(
+                      'Kandersteg, Switzerland',
+                      style: TextStyle(
+                        color: Colors.grey[500],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Icon(
-              Icons.star,
-              color: Colors.red[500],
-            ),
-            const Text(
-              '41',
-              style: TextStyle(
-                color: Colors.white,
+              Icon(
+                Icons.star,
+                color: Colors.red[500],
               ),
-            ),
-          ],
+              const Text(
+                '41',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
     );
+
     return Stack(children: [
       Image.asset(
         cardInfo.imageUrl,
@@ -98,7 +97,7 @@ class Cards extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        '#${cardInfo.numberCard}.',
+                        '#${cardInfo.id}.',
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w400,
